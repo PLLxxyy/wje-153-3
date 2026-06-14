@@ -14,10 +14,11 @@ import CheckIn from './pages/CheckIn';
 import ReviewPage from './pages/ReviewPage';
 import VenueManagement from './pages/VenueManagement';
 import Profile from './pages/Profile';
+import Favorites from './pages/Favorites';
 
 /* ---------- Types ---------- */
 
-type Page = 'home' | 'detail' | 'booking' | 'bookings' | 'checkin' | 'review' | 'admin' | 'profile';
+type Page = 'home' | 'detail' | 'booking' | 'bookings' | 'checkin' | 'review' | 'admin' | 'profile' | 'favorites';
 
 interface RouterState {
   page: Page;
@@ -87,6 +88,8 @@ export default function App() {
         return <VenueManagement onNavigate={navigate} showToast={showToast} />;
       case 'profile':
         return <Profile onNavigate={navigate} showToast={showToast} />;
+      case 'favorites':
+        return <Favorites onNavigate={navigate} showToast={showToast} />;
       default:
         return <Home onNavigate={navigate} />;
     }

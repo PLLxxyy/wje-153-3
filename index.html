@@ -127,12 +127,44 @@
       transform: translateY(-4px);
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
     }
+    .venue-card-img-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
     .venue-card-img {
       width: 100%;
       height: 180px;
       object-fit: cover;
       background: #e8e8e8;
     }
+    .fav-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(233,30,99,0.9);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .fav-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+      z-index: 1;
+    }
+    .fav-btn:hover { transform: scale(1.2); }
     .venue-card-body { padding: 16px; }
     .venue-card-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; }
     .venue-card-tag {
@@ -563,6 +595,88 @@
     .breadcrumb a { color: #667eea; }
     .breadcrumb a:hover { text-decoration: underline; }
 
+    /* ========== Favorite Detail Button ========== */
+    .fav-detail-btn {
+      margin-left: auto;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: #f5f5f5;
+      color: #888;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .fav-detail-btn.active {
+      background: #fce4ec;
+      color: #e91e63;
+    }
+    .fav-detail-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* ========== Favorites List Page ========== */
+    .favorites-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .favorite-item {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .favorite-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .favorite-item-img {
+      width: 120px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 12px;
+      cursor: pointer;
+      flex-shrink: 0;
+      background: #e8e8e8;
+    }
+    .favorite-item-body {
+      flex: 1;
+      cursor: pointer;
+      min-width: 0;
+    }
+    .favorite-item-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .favorite-item-location {
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+    .favorite-item-rating {
+      color: #f5a623;
+      font-size: 0.85rem;
+      margin-top: 2px;
+    }
+    .favorite-item-price {
+      color: #667eea;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .favorite-item-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
     /* ========== Responsive ========== */
     @media (max-width: 768px) {
       .venue-grid { grid-template-columns: 1fr; }
@@ -573,6 +687,9 @@
       .booking-actions { flex-direction: row; align-items: center; }
       .calendar-grid { gap: 3px; }
       .calendar-day { padding: 6px 2px; font-size: 0.8rem; }
+      .favorite-item { flex-direction: column; align-items: stretch; }
+      .favorite-item-img { width: 100%; height: 160px; }
+      .favorite-item-actions { flex-direction: row; }
     }
   </style>
 </head>

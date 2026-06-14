@@ -5,7 +5,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import type { Venue, DaySlot, TimeSlot, Review } from '../types';
 import { VENUE_TYPE_LABELS, VENUE_TYPE_TAG_CLASS, TIME_SLOT_LABELS, TIME_SLOTS } from '../types';
-import { getVenueById, getDaySlot, getReviewsByVenue } from '../utils/storage';
+import { getVenueById, getDaySlot, getReviewsByVenue, isFavorite, toggleFavorite } from '../utils/storage';
 
 interface Props {
   venueId: string;
@@ -32,6 +32,12 @@ export default function CourtDetail({ venueId, onNavigate }: Props) {
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
+  const [isFav, setIsFav] = useState(() => isFavorite(venueId));
+
+  function handleToggleFav() {
+    const nowFav = toggleFavorite(venueId);
+    setIsFav(nowFav);
+  }
 
   // Auto-rotate carousel
   useEffect(() => {
@@ -140,6 +146,12 @@ export default function CourtDetail({ venueId, onNavigate }: Props) {
             {VENUE_TYPE_LABELS[venue.type]}
           </span>
           {venue.name}
+          <button
+            className={`fav-detail-btn ${isFav ? 'active' : ''}`}
+            onClick={handleToggleFav}
+          >
+            {isFav ? '❤️ 已收藏' : '🤍 收藏'}
+          </button>
         </h2>
         <p style={{ color: '#555', marginBottom: 16, lineHeight: 1.8 }}>{venue.description}</p>
         <div className="detail-info-row">📍 <strong>地址：</strong>{venue.location}</div>

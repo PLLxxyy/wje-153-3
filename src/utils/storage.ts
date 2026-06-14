@@ -119,6 +119,33 @@ export function saveUser(user: UserProfile): void {
   writeJSON(STORAGE_KEYS.USER, user);
 }
 
+/* ---------- Favorites ---------- */
+
+export function getFavorites(): string[] {
+  return readJSON<string[]>(STORAGE_KEYS.FAVORITES, []);
+}
+
+export function saveFavorites(favorites: string[]): void {
+  writeJSON(STORAGE_KEYS.FAVORITES, favorites);
+}
+
+export function isFavorite(venueId: string): boolean {
+  return getFavorites().includes(venueId);
+}
+
+export function toggleFavorite(venueId: string): boolean {
+  const list = getFavorites();
+  const idx = list.indexOf(venueId);
+  if (idx >= 0) {
+    list.splice(idx, 1);
+    saveFavorites(list);
+    return false;
+  }
+  list.push(venueId);
+  saveFavorites(list);
+  return true;
+}
+
 /* ---------- Init flag ---------- */
 
 export function isInitialized(): boolean {

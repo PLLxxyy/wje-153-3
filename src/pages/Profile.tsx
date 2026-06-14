@@ -3,7 +3,7 @@
    ================================================================ */
 
 import React, { useState, useMemo } from 'react';
-import { getUser, saveUser } from '../utils/storage';
+import { getUser, saveUser, getFavorites } from '../utils/storage';
 
 interface Props {
   onNavigate: (page: string, params?: Record<string, string>) => void;
@@ -61,6 +61,19 @@ export default function Profile({ onNavigate, showToast }: Props) {
       <div className="detail-section">
         <h2>⚡ 快捷入口</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <button
+            className="booking-card"
+            style={{ textAlign: 'left', cursor: 'pointer', background: '#fff' }}
+            onClick={() => onNavigate('favorites')}
+          >
+            <div>
+              <strong>❤️ 我的收藏</strong>
+              <div style={{ color: '#888', fontSize: '0.85rem', marginTop: 4 }}>管理收藏的场地，快速预约常去场地</div>
+            </div>
+            <span style={{ color: '#667eea', fontWeight: 600, fontSize: '1.2rem', whiteSpace: 'nowrap' }}>
+              {getFavorites().length}
+            </span>
+          </button>
           <button
             className="booking-card"
             style={{ textAlign: 'left', cursor: 'pointer', background: '#fff' }}

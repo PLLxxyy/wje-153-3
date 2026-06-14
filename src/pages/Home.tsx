@@ -1,11 +1,11 @@
 /* ================================================================
-   Home.tsx — Venue list with category filter and search
+   Home.tsx — Venue list with category filter, search, and favorites
    ================================================================ */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import type { Venue, VenueType } from '../types';
 import { VENUE_TYPE_LABELS, VENUE_TYPE_TAG_CLASS } from '../types';
-import { getVenues } from '../utils/storage';
+import { getVenues, getFavorites, isFavorite, toggleFavorite } from '../utils/storage';
 
 interface Props {
   onNavigate: (page: string, params?: Record<string, string>) => void;
@@ -29,6 +29,18 @@ export default function Home({ onNavigate }: Props) {
   const venues = useMemo(() => getVenues(), []);
   const [category, setCategory] = useState<string>('all');
   const [search, setSearch] = useState('');
+  const [favVersion, setFavVersion] = useState(0);
+
+  const handleToggleFav = useCallback((e: React.MouseEvent, venueId: string) => {
+    e.stopPropagation();
+    toggleFavorite(venueId);
+    setFavVersion((v) => v + 1);
+  }, []);
+
+  const favoriteIds = useMemo(() => {
+    void favVersion;
+    return new Set(getFavorites());
+  }, [favVersion]);
 
   const filtered = useMemo(() => {
     let list = venues;
@@ -44,8 +56,13 @@ export default function Home({ onNavigate }: Props) {
           VENUE_TYPE_LABELS[v.type].includes(q),
       );
     }
+    list = [...list].sort((a, b) => {
+      const aFav = favoriteIds.has(a.id) ? 0 : 1;
+      const bFav = favoriteIds.has(b.id) ? 0 : 1;
+      return aFav - bFav;
+    });
     return list;
-  }, [venues, category, search]);
+  }, [venues, category, search, favoriteIds]);
 
   return (
     <div>
@@ -87,7 +104,13 @@ export default function Home({ onNavigate }: Props) {
         ) : (
           <div className="venue-grid">
             {filtered.map((venue) => (
-              <VenueCard key={venue.id} venue={venue} onNavigate={onNavigate} />
+              <VenueCard
+                key={venue.id}
+                venue={venue}
+                isFav={favoriteIds.has(venue.id)}
+                onToggleFav={handleToggleFav}
+                onNavigate={onNavigate}
+              />
             ))}
           </div>
         )}
@@ -96,10 +119,30 @@ export default function Home({ onNavigate }: Props) {
   );
 }
 
-function VenueCard({ venue, onNavigate }: { venue: Venue; onNavigate: Props['onNavigate'] }) {
+function VenueCard({
+  venue,
+  isFav,
+  onToggleFav,
+  onNavigate,
+}: {
+  venue: Venue;
+  isFav: boolean;
+  onToggleFav: (e: React.MouseEvent, venueId: string) => void;
+  onNavigate: Props['onNavigate'];
+}) {
   return (
     <div className="venue-card" onClick={() => onNavigate('detail', { id: venue.id })}>
-      <img className="venue-card-img" src={venue.images[0]} alt={venue.name} loading="lazy" />
+      <div className="venue-card-img-wrapper">
+        <img className="venue-card-img" src={venue.images[0]} alt={venue.name} loading="lazy" />
+        {isFav && <span className="fav-badge">已收藏</span>}
+        <button
+          className={`fav-btn ${isFav ? 'active' : ''}`}
+          onClick={(e) => onToggleFav(e, venue.id)}
+          title={isFav ? '取消收藏' : '收藏'}
+        >
+          {isFav ? '❤️' : '🤍'}
+        </button>
+      </div>
       <div className="venue-card-body">
         <div className="venue-card-title">{venue.name}</div>
         <span className={`venue-card-tag ${VENUE_TYPE_TAG_CLASS[venue.type]}`}>

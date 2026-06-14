@@ -92,6 +92,7 @@ export const STORAGE_KEYS = {
   REVIEWS: 'sports_reviews',
   USER: 'sports_user',
   INITIALIZED: 'sports_initialized',
+  FAVORITES: 'sports_favorites',
 } as const;
 
 /** 时段中文映射 */
